@@ -1,0 +1,63 @@
+[
+  {
+    "tests": 7,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "name": "four.BoardPanelTest",
+    "cases": [
+      "paintsTheConfiguredBackgroundInHeadlessMode",
+      "preservesTheTurnWhenAFullColumnIsClicked",
+      "displaysDistinctColorsForBothPlayers",
+      "rejectsANullListener",
+      "createsAllNamedButtonsWithTheSameInitialColor",
+      "highlightsExactlyFourCellsAndRestoresTheirColors",
+      "playsAndResetsACompleteGameThroughRealButtons"
+    ]
+  },
+  {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "name": "four.CellActionListenerTest",
+    "cases": [
+      "displaysAcceptedPiecesAtTheirGravityPositions",
+      "resetsTheModelAndView",
+      "ignoresAFullColumn",
+      "ignoresUnrelatedComponents",
+      "rejectsNullDependencies",
+      "highlightsAWinnerAndIgnoresLaterMoves"
+    ]
+  },
+  {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "name": "four.GameManagerTest",
+    "cases": [
+      "startsWithAnEmptyBoardAndXTurn",
+      "detectsADrawAndRejectsFurtherMoves",
+      "protectsWinningCoordinatesWithADeepCopy",
+      "detectsWinningLines(String, char, int, int)[1]",
+      "detectsWinningLines(String, char, int, int)[2]",
+      "detectsWinningLines(String, char, int, int)[3]",
+      "detectsWinningLines(String, char, int, int)[4]",
+      "detectsWinningLines(String, char, int, int)[5]",
+      "detectsWinningLines(String, char, int, int)[6]",
+      "detectsWinningLines(String, char, int, int)[7]",
+      "appliesGravityAndAlternatesTurns",
+      "rejectsAFullColumnWithoutChangingTurn",
+      "rejectsMovesAfterVictory",
+      "rejectsInvalidColumns(char)[1]",
+      "rejectsInvalidColumns(char)[2]",
+      "rejectsInvalidColumns(char)[3]",
+      "rejectsInvalidColumns(char)[4]",
+      "doesNotReportIncompleteLines(String)[1]",
+      "doesNotReportIncompleteLines(String)[2]",
+      "doesNotReportIncompleteLines(String)[3]",
+      "resetsAllStateAndAllowsAnotherCompleteGame"
+    ]
+  }
+]

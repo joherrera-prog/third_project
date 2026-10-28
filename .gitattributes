@@ -1,0 +1,13 @@
+*.java text eol=lf
+*.xml text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+/mvnw text eol=lf
+
+# Collapse generated report snapshots in the pull request by default.
+docs/evidence/reports/** linguist-generated=true -whitespace
+docs/evidence/data/** linguist-generated=true
+docs/evidence/*.log linguist-generated=true -whitespace
+
+# Preserve the official Windows wrapper's CRLF line endings.
+/mvnw.cmd whitespace=cr-at-eol

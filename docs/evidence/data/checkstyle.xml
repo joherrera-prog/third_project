@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.3">
+<file name="&lt;project&gt;/src/main/java/four/GameView.java">
+</file>
+<file name="&lt;project&gt;/src/main/java/four/CellButton.java">
+</file>
+<file name="&lt;project&gt;/src/main/java/four/CellActionListener.java">
+</file>
+<file name="&lt;project&gt;/src/main/java/four/ConnectFour.java">
+</file>
+<file name="&lt;project&gt;/src/main/java/four/GameManager.java">
+</file>
+<file name="&lt;project&gt;/src/main/java/four/BoardPanel.java">
+</file>
+<file name="&lt;project&gt;/src/main/java/four/Main.java">
+</file>
+<file name="&lt;project&gt;/src/main/java/four/package-info.java">
+</file>
+</checkstyle>

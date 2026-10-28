@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Desktop Connect Four</a> &gt; <a href="index.source.html" class="el_package">four</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">
+package four;
+
+import javax.swing.SwingUtilities;
+
+/**
+ * Acts as the application entry point and composition root.
+ */
+public final class Main {
+
+    /** Prevents instantiation of this utility class. */
+    private Main() {
+    }
+
+    /**
+     * Requests window creation on the Swing event-dispatch thread.
+     *
+     * @param args command-line arguments, which are not used
+     */
+    public static void main(final String[] args) {
+        // A constructor reference is the task submitted to Swing.
+<span class="nc" id="L22">        SwingUtilities.invokeLater(ConnectFour::new);</span>
+<span class="nc" id="L23">    }</span>
+
+    /**
+     * Wires an existing window without recursively creating another one.
+     *
+     * @param window the window currently being initialized
+     */
+    static void initializeGame(final ConnectFour window) {
+<span class="nc" id="L31">        final GameManager model = new GameManager();</span>
+<span class="nc" id="L32">        final BoardPanel view = new BoardPanel();</span>
+
+        // The controller depends on GameView, not on JFrame.
+        // Dependency injection
+<span class="nc" id="L36">        final CellActionListener controller =</span>
+                new CellActionListener(model, view);
+
+        // Register the controller to receive actions from the panel's buttons.
+<span class="nc" id="L40">        view.addActionListener(controller);</span>
+<span class="nc" id="L41">        window.setContentPane(view);</span>
+<span class="nc" id="L42">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.16.202610240946</span></div></body></html>
