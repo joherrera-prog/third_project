@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CellActionListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Desktop Connect Four</a> &gt; <a href="index.source.html" class="el_package">four</a> &gt; <span class="el_source">CellActionListener.java</span></div><h1>CellActionListener.java</h1><pre class="source lang-java linenums">// The controller, its job will be to receive an action and ask the model to
+// process it and tell the view what to show
+
+package four;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Objects;
+
+/**
+ * Coordinates UI actions with the model through an injected view contract.
+ */
+public final class CellActionListener implements ActionListener {
+
+    /** The model used by this controller. */
+    // Dependency
+    private final GameManager gameManager;
+
+    /** The visual contract, implemented by Swing or mocked in tests. */
+    // Dependency
+    private final GameView boardView;
+
+    /**
+     * Receives the dependencies instead of constructing them internally.
+     *
+     * @param model the game model
+     * @param view the visual implementation
+     */
+    // Dependency injectiom
+<span class="fc" id="L30">    public CellActionListener(final GameManager model, final GameView view) {</span>
+<span class="fc" id="L31">        gameManager = Objects.requireNonNull(model, &quot;model&quot;);</span>
+<span class="fc" id="L32">        boardView = Objects.requireNonNull(view, &quot;view&quot;);</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Processes reset actions and board-cell clicks.
+     *
+     * @param event the action emitted by a registered component
+     */
+    @Override
+    public void actionPerformed(final ActionEvent event) {
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (GameView.RESET_COMMAND.equals(event.getActionCommand())) {</span>
+<span class="fc" id="L43">            gameManager.reset(); // Reset the actual game data.</span>
+<span class="fc" id="L44">            boardView.resetBoard(); // Reset the displayed board.</span>
+<span class="fc" id="L45">            return; // Reset is not a board-cell move.</span>
+        }
+
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (!(event.getSource() instanceof CellButton)) {</span>
+<span class="fc" id="L49">            return; // Ignore unrelated components safely.</span>
+        }
+
+        // This cast refers to the existing button; it creates no button.
+<span class="fc" id="L53">        final CellButton clickedButton = (CellButton) event.getSource();</span>
+<span class="fc" id="L54">        final char column = clickedButton.getColumn();</span>
+
+<span class="fc" id="L56">        final int dropRowIndex = gameManager.dropPiece(column);</span>
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (dropRowIndex == -1) {</span>
+<span class="fc" id="L59">            return; // Rejected moves must not change the view.</span>
+        }
+
+<span class="fc" id="L62">        final int colIndex = column - 'A';</span>
+
+        // Read the stored piece because the model may have changed turns.
+<span class="fc" id="L65">        final char piece = gameManager.getPieceAt(dropRowIndex, colIndex);</span>
+
+        // Update the visible button
+<span class="fc" id="L68">        boardView.updateButtonText(column, dropRowIndex, piece);</span>
+
+        // We highlight the winning tokens
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (gameManager.hasWinner()) {</span>
+<span class="fc" id="L72">            boardView.highlightWinningCells(gameManager.getWinningCells());</span>
+        }
+<span class="fc" id="L74">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.16.202610240946</span></div></body></html>

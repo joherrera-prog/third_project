@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoardPanel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Desktop Connect Four</a> &gt; <a href="index.source.html" class="el_package">four</a> &gt; <span class="el_source">BoardPanel.java</span></div><h1>BoardPanel.java</h1><pre class="source lang-java linenums">// This class builds a visual board and changes its buttons when the controller
+// asks for that
+
+package four;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.util.Objects;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.plaf.basic.BasicButtonUI;
+
+/**
+ * Displays the board without depending on a top-level Swing window.
+ *
+ * &lt;p&gt;A JPanel can be constructed, clicked, and painted in headless tests.
+ * The panel never decides whether a move is legal or winning.&lt;/p&gt;
+ */
+public final class BoardPanel extends JPanel implements GameView {
+// This class contains another panel called grid where the 42 boxes are, and the
+// reset button, but the window that contains everything is in ConnectFour.java
+    /** Explicit serialization version for this panel class. */
+    private static final long serialVersionUID = 1L;
+
+    /** The background shared by all non-winning empty cells. */
+<span class="fc" id="L29">    private static final Color BASE_COLOR = new Color(53, 22, 97);</span>
+
+    /** The background shared by the four winning cells. */
+<span class="fc" id="L32">    private static final Color WIN_COLOR = new Color(186, 145, 75);</span>
+
+    /** The background visible between adjacent cells. */
+<span class="fc" id="L35">    private static final Color GAP_COLOR = new Color(19, 0, 43, 255);</span>
+
+    /** Muted red background for X pieces. */
+<span class="fc" id="L38">    private static final Color X_COLOR = new Color(145, 65, 75);</span>
+
+    /** Muted blue background for O pieces. */
+<span class="fc" id="L41">    private static final Color O_COLOR = new Color(60, 100, 145);</span>
+
+    /** The piece represented by the muted red background. */
+    private static final char X_PIECE = 'X';
+
+    /** The gap between adjacent cells in pixels. */
+    private static final int GAP_SIZE = 4;
+
+    /** The piece font size in points. */
+    private static final int FONT_SIZE = 36;
+
+    /** The font shared by every cell. */
+<span class="fc" id="L53">    private static final Font PIECE_FONT =</span>
+            new Font(&quot;SansSerif&quot;, Font.BOLD, FONT_SIZE);
+
+    /** References to the existing buttons, indexed from the bottom row. */
+<span class="fc" id="L57">    private final CellButton[][] buttonGrid =</span>
+            new CellButton[GameManager.ROWS][GameManager.COLUMNS];
+
+    /** The reset button remains enabled after a finished game. */
+<span class="fc" id="L61">    private final JButton resetButton = new JButton(&quot;Reset&quot;);</span>
+
+    /** Builds every visual component without creating a model. */
+    public BoardPanel() {
+<span class="fc" id="L65">        super(new BorderLayout());</span>
+
+        // Interior panel, also create another panel called Grid
+        // Grid panel is just the grid panel, doesnt include the reset button,
+        // Board Panel does
+<span class="fc" id="L70">        final JPanel grid = new JPanel(new GridLayout(GameManager.ROWS,</span>
+                GameManager.COLUMNS, GAP_SIZE, GAP_SIZE));
+
+<span class="fc" id="L73">        grid.setBackground(GAP_COLOR);</span>
+
+
+        // GridLayout displays the first added row at the top.
+        // Add visual row six first, while storing it at matrix index five.
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (int row = GameManager.ROWS; row &gt;= 1; row--) {</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            for (int colIndex = 0; colIndex &lt; GameManager.COLUMNS; colIndex++) {</span>
+<span class="fc" id="L80">                final char column = (char) ('A' + colIndex);</span>
+<span class="fc" id="L81">                final CellButton button = new CellButton(column, row);</span>
+
+<span class="fc" id="L83">                button.setUI(new BasicButtonUI()); // Respect custom colors.</span>
+<span class="fc" id="L84">                button.setBackground(BASE_COLOR);</span>
+<span class="fc" id="L85">                button.setForeground(Color.WHITE); // Text color</span>
+<span class="fc" id="L86">                button.setFont(PIECE_FONT);</span>
+
+<span class="fc" id="L88">                buttonGrid[row - 1][colIndex] = button;</span>
+<span class="fc" id="L89">                grid.add(button);</span>
+            }
+        }
+
+        // Reset Button config
+<span class="fc" id="L94">        resetButton.setName(&quot;ButtonReset&quot;); // Hyperskill component name.</span>
+<span class="fc" id="L95">        resetButton.setActionCommand(RESET_COMMAND); // Controller command.</span>
+<span class="fc" id="L96">        resetButton.setEnabled(true);</span>
+
+        // Its just like &quot;this.add&quot;, refers to the object BoardPanel that we are
+        // building
+<span class="fc" id="L100">        add(grid, BorderLayout.CENTER);</span>
+<span class="fc" id="L101">        add(resetButton, BorderLayout.SOUTH);</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Registers the same controller on all board cells and the reset button.
+     *
+     * @param listener the controller that processes UI actions
+     */
+    // This is the controller
+    public void addActionListener(final ActionListener listener) {
+<span class="fc" id="L111">        Objects.requireNonNull(listener, &quot;The controller must not be null&quot;);</span>
+        // Register the listener in every button
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        for (CellButton[] row : buttonGrid) {</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">            for (CellButton button : row) {</span>
+<span class="fc" id="L115">                button.addActionListener(listener);</span>
+            }
+        }
+
+<span class="fc" id="L119">        resetButton.addActionListener(listener);</span>
+<span class="fc" id="L120">    }</span>
+
+    /**
+     * Displays the piece at the position calculated by the model.
+     *
+     * @param column the visual column letter
+     * @param rowIndex the zero-based row index
+     * @param piece the accepted piece
+     */
+    @Override
+    public void updateButtonText(final char column, final int rowIndex,
+                                 final char piece) {
+        // Convert the column letter into an array index.
+<span class="fc" id="L133">        int columnIndex = column - 'A';</span>
+
+        // Retrieve the button where the piece actually landed.
+<span class="fc" id="L136">        CellButton button = buttonGrid[rowIndex][columnIndex];</span>
+
+        // Display the symbol of the player who made this move.
+<span class="fc" id="L139">        button.setText(String.valueOf(piece));</span>
+
+        // Choose the background according to the placed piece.
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (piece == X_PIECE) {</span>
+            // Use a soft, dark red for X.
+<span class="fc" id="L144">            button.setBackground(X_COLOR);</span>
+        } else {
+            // Use a soft, dark blue for O.
+<span class="fc" id="L147">            button.setBackground(O_COLOR);</span>
+        }
+
+        // Keep the symbol readable on the colored background.
+<span class="fc" id="L151">        button.setForeground(Color.WHITE);</span>
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * Applies the winning background and a contrasting text color.
+     *
+     * @param cells pairs of row and column indices supplied by the model
+     */
+    @Override
+    public void highlightWinningCells(final int[]... cells) {
+        // cells will have the winning pairs, the loop takes a pair in each
+        // iteration
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        for (int[] cell : cells) {</span>
+<span class="fc" id="L164">            final CellButton button = buttonGrid[cell[0]][cell[1]];</span>
+<span class="fc" id="L165">            button.setBackground(WIN_COLOR);</span>
+<span class="fc" id="L166">            button.setForeground(Color.BLACK);</span>
+        }
+<span class="fc" id="L168">    }</span>
+
+    /** Clears every displayed piece and restores the original colors. */
+    @Override
+    public void resetBoard() {
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        for (CellButton[] row : buttonGrid) {</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">            for (CellButton button : row) {</span>
+<span class="fc" id="L175">                button.setText(&quot; &quot;);</span>
+<span class="fc" id="L176">                button.setBackground(BASE_COLOR);</span>
+<span class="fc" id="L177">                button.setForeground(Color.WHITE);</span>
+            }
+        }
+<span class="fc" id="L180">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.16.202610240946</span></div></body></html>

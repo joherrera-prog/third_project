@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Connect Four rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Production rules for correctness and maintainability.
+        Independent Swing components must be allocated inside grid loops.
+    </description>
+
+    <rule ref="category/java/bestpractices.xml"/>
+
+    <rule ref="category/java/errorprone.xml"/>
+
+    <rule ref="category/java/performance.xml">
+        <!-- Each cell requires its own component instance. -->
+        <exclude name="AvoidInstantiatingObjectsInLoops"/>
+    </rule>
+</ruleset>
