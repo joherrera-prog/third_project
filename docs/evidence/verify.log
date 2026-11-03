@@ -1,0 +1,102 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------< com.griddynamics.internship:connect-four >--------------
+[INFO] Building Desktop Connect Four 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ connect-four ---
+[INFO] Deleting <project>/target
+[INFO] 
+[INFO] --- jacoco:0.8.16:prepare-agent (coverage-agent) @ connect-four ---
+[INFO] jacocoArgLine set to -javaagent:<local-maven-repository>/org/jacoco/org.jacoco.agent/0.8.16/org.jacoco.agent-0.8.16-runtime.jar=destfile=<project>/target/jacoco.exec,includes=four.*
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ connect-four ---
+[INFO] skip non existing resourceDirectory <project>/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ connect-four ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 8 source files with javac [debug release 17] to target/classes
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ connect-four ---
+[INFO] skip non existing resourceDirectory <project>/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ connect-four ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 3 source files with javac [debug release 17] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ connect-four ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running four.BoardPanelTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.243 s -- in four.BoardPanelTest
+[INFO] Running four.CellActionListenerTest
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.247 s -- in four.CellActionListenerTest
+[INFO] Running four.GameManagerTest
+[INFO] Tests run: 21, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s -- in four.GameManagerTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 34, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ connect-four ---
+[INFO] Building jar: <project>/target/connect-four-1.0.0.jar
+[INFO] 
+[INFO] --- jacoco:0.8.16:report (coverage-report-and-gate) @ connect-four ---
+[INFO] Loading execution data file <project>/target/jacoco.exec
+[INFO] Analyzed bundle 'Desktop Connect Four' with 6 classes
+[INFO] 
+[INFO] --- jacoco:0.8.16:check (coverage-report-and-gate) @ connect-four ---
+[INFO] Loading execution data file <project>/target/jacoco.exec
+[INFO] Analyzed bundle 'connect-four' with 6 classes
+[INFO] All coverage checks have been met.
+[INFO] 
+[INFO] --- checkstyle:3.6.0:checkstyle (style-report-and-gate) @ connect-four ---
+[INFO] Rendering content with org.apache.maven.skins:maven-fluido-skin:jar:2.0.0-M9 skin
+[INFO] Starting audit...
+Audit done.
+[INFO] 
+[INFO] --- checkstyle:3.6.0:check (style-report-and-gate) @ connect-four ---
+[INFO] Starting audit...
+Audit done.
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] >>> pmd:3.28.0:check (pmd-report-and-gate) > :pmd @ connect-four >>>
+[INFO] 
+[INFO] --- pmd:3.28.0:pmd (pmd) @ connect-four ---
+[INFO] PMD version: 7.17.0
+[INFO] Rendering content with org.apache.maven.skins:maven-fluido-skin:jar:2.0.0-M9 skin
+[INFO] 
+[INFO] <<< pmd:3.28.0:check (pmd-report-and-gate) < :pmd @ connect-four <<<
+[INFO] 
+[INFO] 
+[INFO] --- pmd:3.28.0:check (pmd-report-and-gate) @ connect-four ---
+[INFO] 
+[INFO] >>> spotbugs:4.10.5.0:check (bugs-report-and-gate) > :spotbugs @ connect-four >>>
+[INFO] 
+[INFO] --- spotbugs:4.10.5.0:spotbugs (spotbugs) @ connect-four ---
+[INFO] Done SpotBugs Analysis....
+[INFO] Skipping com.github.spotbugs:spotbugs-maven-plugin:4.10.5.0:spotbugs report goal
+[INFO] 
+[INFO] <<< spotbugs:4.10.5.0:check (bugs-report-and-gate) < :spotbugs @ connect-four <<<
+[INFO] 
+[INFO] 
+[INFO] --- spotbugs:4.10.5.0:check (bugs-report-and-gate) @ connect-four ---
+[INFO] BugInstance size is 0
+[INFO] Error size is 0
+[INFO] No errors/warnings found
+[INFO] 
+[INFO] --- spotbugs:4.10.5.0:spotbugs (bugs-html-report) @ connect-four ---
+[INFO] Done SpotBugs Analysis....
+[INFO] Skipping com.github.spotbugs:spotbugs-maven-plugin:4.10.5.0:spotbugs report goal
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  11.079 s
+[INFO] Finished at: 2026-10-28T12:13:43-06:00
+[INFO] ------------------------------------------------------------------------

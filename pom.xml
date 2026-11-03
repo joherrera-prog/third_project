@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.griddynamics.internship</groupId>
+    <artifactId>connect-four</artifactId>
+    <version>1.0.0</version>
+
+    <name>Desktop Connect Four</name>
+    <description>
+        A Java 17 Swing game with independently testable rules.
+    </description>
+
+    <properties>
+        <!-- Generate Java 17 bytecode even when Maven runs on JDK 27. -->
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <junit.version>5.10.2</junit.version>
+        <mockito.version>5.23.0</mockito.version>
+        <bytebuddy.version>1.18.15</bytebuddy.version>
+
+        <compiler.version>3.13.0</compiler.version>
+        <surefire.version>3.5.4</surefire.version>
+        <jacoco.version>0.8.16</jacoco.version>
+        <checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
+        <pmd.plugin.version>3.28.0</pmd.plugin.version>
+        <pmd.asm.version>9.11</pmd.asm.version>
+        <spotbugs.plugin.version>4.10.5.0</spotbugs.plugin.version>
+        <findsecbugs.version>1.14.0</findsecbugs.version>
+
+        <!-- JaCoCo replaces this property before Surefire starts. -->
+        <jacocoArgLine/>
+    </properties>
+
+    <!--
+        Mockito generates classes at runtime through Byte Buddy.
+        Keep both Byte Buddy artifacts on the same version.
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${bytebuddy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${bytebuddy.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Includes JUnit Jupiter assertions and parameterized tests. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Used to replace the visual contract in controller unit tests. -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compile production code and test code for Java 17. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler.version}</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+
+            <!-- Execute JUnit tests without opening desktop windows. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+
+                <configuration>
+                    <!--
+                        Preserve JaCoCo's agent and preload Mockito's agent.
+                        Preloading avoids relying on dynamic self-attachment.
+                    -->
+                    <argLine>@{jacocoArgLine} "-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar"</argLine>
+
+                    <failIfNoTests>true</failIfNoTests>
+
+                    <systemPropertyVariables>
+                        <java.awt.headless>true</java.awt.headless>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
+            <!-- Measure coverage and enforce both aggregate thresholds. -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+
+                <executions>
+                    <execution>
+                        <id>coverage-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+
+                        <configuration>
+                            <propertyName>jacocoArgLine</propertyName>
+
+                            <!-- Instrument our classes, not JDK internals. -->
+                            <includes>
+                                <include>four.*</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>coverage-report-and-gate</id>
+                        <phase>verify</phase>
+
+                        <goals>
+                            <goal>report</goal>
+                            <goal>check</goal>
+                        </goals>
+
+                        <configuration>
+                            <!-- No production classes are excluded. -->
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.80</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Apply the unmodified Sun rules to production sources. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.plugin.version}</version>
+
+                <configuration>
+                    <configLocation>sun_checks.xml</configLocation>
+                    <linkXRef>false</linkXRef>
+                    <includeTestSourceDirectory>false</includeTestSourceDirectory>
+                    <includeResources>false</includeResources>
+                    <includeTestResources>false</includeTestResources>
+                    <consoleOutput>true</consoleOutput>
+                    <failOnViolation>true</failOnViolation>
+                    <maxAllowedViolations>0</maxAllowedViolations>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>style-report-and-gate</id>
+                        <phase>verify</phase>
+
+                        <goals>
+                            <goal>checkstyle</goal>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Generate the PMD report and reject every configured finding. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.plugin.version}</version>
+
+                <!-- Read JDK 27 library classes without hiding analysis errors. -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>${pmd.asm.version}</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <targetJdk>17</targetJdk>
+                    <includeTests>false</includeTests>
+                    <linkXRef>false</linkXRef>
+                    <failOnViolation>true</failOnViolation>
+                    <maxAllowedViolations>0</maxAllowedViolations>
+                    <failurePriority>5</failurePriority>
+                    <printFailingErrors>true</printFailingErrors>
+
+                    <rulesets>
+                        <ruleset>${project.basedir}/config/pmd-ruleset.xml</ruleset>
+                    </rulesets>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>pmd-report-and-gate</id>
+                        <phase>verify</phase>
+
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Analyze application bytecode, including security detectors. -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.plugin.version}</version>
+
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+
+                    <!--
+                        Do not hide analyzer failures.
+                        Unsupported class-file errors are engine failures,
+                        not application bug patterns that filters can fix.
+                    -->
+                    <failOnError>true</failOnError>
+
+                    <!-- Use the standard XML analysis and Maven HTML report. -->
+                    <xmlOutput>false</xmlOutput>
+                    <htmlOutput>false</htmlOutput>
+                    <outputDirectory>${project.build.directory}/site</outputDirectory>
+
+                    <plugins>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>${findsecbugs.version}</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>bugs-report-and-gate</id>
+                        <phase>verify</phase>
+
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+
+                    <!-- Keep the gate's XML separate from HTML reporter output. -->
+                    <execution>
+                        <id>bugs-html-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>spotbugs</goal>
+                        </goals>
+                        <configuration>
+                            <htmlOutput>true</htmlOutput>
+                            <spotbugsXmlOutputFilename>spotbugs-html.xml</spotbugsXmlOutputFilename>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Create an executable JAR; Swing needs no runtime dependency. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.1</version>
+
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>four.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <outputDirectory>${project.build.directory}/site</outputDirectory>
+    </reporting>
+</project>

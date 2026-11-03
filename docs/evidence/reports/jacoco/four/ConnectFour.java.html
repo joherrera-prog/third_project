@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConnectFour.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Desktop Connect Four</a> &gt; <a href="index.source.html" class="el_package">four</a> &gt; <span class="el_source">ConnectFour.java</span></div><h1>ConnectFour.java</h1><pre class="source lang-java linenums">// Window that contains tha game
+
+package four;
+
+import javax.swing.JFrame;
+
+/**
+ * Provides the top-level window expected by Hyperskill Swing tests.
+ *
+ * &lt;p&gt;Constructing this class prepares the complete game, even when a test
+ * creates the window directly instead of invoking Main.main().&lt;/p&gt;
+ */
+public final class ConnectFour extends JFrame {
+
+    /** Explicit serialization version for this window class. */
+    private static final long serialVersionUID = 1L;
+
+    /** Initial window width in pixels. */
+    private static final int WINDOW_WIDTH = 700;
+
+    /** Initial window height in pixels. */
+    private static final int WINDOW_HEIGHT = 600;
+
+    /** Creates the window and requests application wiring. */
+    public ConnectFour() {
+        // Setting title from superclass
+<span class="nc" id="L27">        super(&quot;Connect Four&quot;);</span>
+
+<span class="nc" id="L29">        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L30">        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);</span>
+
+        // Pass this existing window to the composition root.
+        // initializeGame does not construct another ConnectFour.
+<span class="nc" id="L34">        Main.initializeGame(this);</span>
+
+<span class="nc" id="L36">        setLocationRelativeTo(null);</span>
+
+        // The named buttons already exist when the window becomes visible.
+<span class="nc" id="L39">        setVisible(true);</span>
+<span class="nc" id="L40">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.16.202610240946</span></div></body></html>

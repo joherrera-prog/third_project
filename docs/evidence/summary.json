@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-10-28T12:13:43-06:00",
+  "java_runtime": "27+35-2325",
+  "os": "Mac OS X",
+  "architecture": "aarch64",
+  "command": "./mvnw -o -B -ntp clean verify (custom local dependency cache)",
+  "tests": {
+    "tests": 34,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "coverage": {
+    "LINE": {
+      "covered": 141,
+      "missed": 15,
+      "percent": 90.38
+    },
+    "BRANCH": {
+      "covered": 72,
+      "missed": 0,
+      "percent": 100.0
+    }
+  },
+  "checkstyle_violations": 0,
+  "pmd_violations": 0,
+  "spotbugs_bugs": 0,
+  "spotbugs_errors": 0,
+  "spotbugs_missing_classes": 0,
+  "spotbugs_analyzed_classes": 8,
+  "hyperskill": "Not executed in this verification session"
+}

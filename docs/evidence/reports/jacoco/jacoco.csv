@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Desktop Connect Four,four,Main,24,0,0,0,8,0,2,0,2,0
+Desktop Connect Four,four,GameManager,0,383,0,48,0,57,0,37,0,13
+Desktop Connect Four,four,CellActionListener,0,75,0,8,0,21,0,6,0,2
+Desktop Connect Four,four,BoardPanel,0,299,0,16,0,52,0,14,0,6
+Desktop Connect Four,four,CellButton,0,35,0,0,0,11,0,3,0,3
+Desktop Connect Four,four,ConnectFour,19,0,0,0,7,0,1,0,1,0

@@ -1,0 +1,16 @@
+# Maven output and local verification logs.
+target/
+/verify.log
+/javadoc.log
+
+# IDE configuration and operating-system files.
+.idea/
+*.iml
+out/
+.vscode/
+.DS_Store
+
+# Local caches and Python bytecode.
+.m2/
+__pycache__/
+*.pyc
